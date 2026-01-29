@@ -9,7 +9,8 @@ const {
   obtenerUsuario,
   obtenerServicios,
   agregarServicio
-} = require("./db/consultas");
+} = require("./db/consultas.js");
+const verificarToken = require("./middlewares/auth.js");
 
 const app = express();
 
@@ -22,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 
-app.post("/registro", async (req, res) => {
+app.post("/register", async (req, res) => {
   try {
     const usuario = req.body;
     const nuevoUsuario = await registrarUsuario(usuario);
@@ -55,28 +56,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/profile", verificarToken, async (req, res) => {
     try {
-      const Authorization = req.header("Authorization");
-  
-      if (!Authorization) {
-        throw { code: 401, message: "Token no proporcionado" };
-      }
-  
-      const token = Authorization.split("Bearer ")[1];
-  
-      jwt.verify(token, process.env.JWT_SECRET);
-  
-      const { email } = jwt.decode(token);
-      const usuario = await obtenerUsuario(email);
-  
+      const usuario = await obtenerUsuario(req.email);
       res.json(usuario);
     } catch (error) {
       res.status(error.code || 401).json(error);
     }
   });
 
-  app.get("/servicios", async (req,res) => {
+  app.get("/services", async (req,res) => {
     try {
         const servicios = await obtenerServicios();
         res.json(servicios);
@@ -86,7 +75,7 @@ app.get("/profile", async (req, res) => {
     }
 });
 
-app.post("/servicios", async(req, res) => {
+app.post("/services", async(req, res) => {
     try {
         const { titulo, foto, descripcion, precio, usuario_id, categoria_id } = req.body;
         await agregarServicio (titulo, foto, descripcion, precio, usuario_id, categoria_id );
@@ -103,3 +92,5 @@ app.post("/servicios", async(req, res) => {
 app.listen(3000, () => {
   console.log("Servidor activo");
 });
+
+module.exports = app;

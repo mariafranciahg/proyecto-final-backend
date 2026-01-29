@@ -2,19 +2,33 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.17.2"
-  }
+    "pg": "^8.17.2",
+    "supertest": "^7.2.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariafranciahg/proyecto-final-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mariafranciahg/proyecto-final-backend/issues"
+  },
+  "homepage": "https://github.com/mariafranciahg/proyecto-final-backend#readme",
+  "description": ""
 }
