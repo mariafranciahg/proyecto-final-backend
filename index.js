@@ -8,7 +8,13 @@ const {
   verificarCredenciales,
   obtenerUsuario,
   obtenerServicios,
-  agregarServicio
+  agregarServicio,
+  obtenerCategoria,
+  crearSolicitud,
+  obtenerSolicitudesRecibidas,
+  obtenerSolicitudesUsuario,
+  actualizarEstado,
+  eliminarSolicitud
 } = require("./db/consultas.js");
 const verificarToken = require("./middlewares/auth.js");
 
@@ -65,28 +71,93 @@ app.get("/profile", verificarToken, async (req, res) => {
     }
   });
 
-  app.get("/services", async (req,res) => {
-    try {
-        const servicios = await obtenerServicios();
-        res.json(servicios);
-    } catch (error) {
-        console.log(error);
-        res.status(error.code || 500).send(error.message || "Error interno");
-    }
+
+app.get("/services", async (req,res) => {
+  try {
+    const categoriaId = req.query.category || null;
+
+    const servicios = await obtenerServicios(categoriaId);
+    res.json(servicios);
+  } catch (error) {
+    console.log(error);
+    res.status(error.code || 500).send(error.message || "Error interno");
+  }
 });
+
 
 app.post("/services", async(req, res) => {
     try {
         const { titulo, foto, descripcion, precio, usuario_id, categoria_id } = req.body;
         await agregarServicio (titulo, foto, descripcion, precio, usuario_id, categoria_id );
-        res.send ("Servicio agregado");
+        res.json({ message: "Servicio agregado" });
     } catch (error) {
         console.log(error);
-        res.status(error.code || 500).send(error.message || "Error interno");
+        res.status(error.code || 500).json({ error: error.message || "Error interno" });
     }
 
 });
   
+app.get("/categories", async (req, res) => {
+  try {
+    const categoria = await obtenerCategoria();
+  res.json(categoria);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error al obtener categorías" });
+  }
+});
+
+app.post("/solicitudes", verificarToken, async (req, res) => {
+  try {
+    const solicitud = await crearSolicitud(req.body);
+    res.status(201).json(solicitud);
+  } catch (error) {
+    console.log(error);
+    res.status(error.code || 500).json({ message: error.message || "Error interno" });
+  }
+});
+
+app.get("/solicitudes/realizadas", verificarToken, async (req, res) => {
+  try {
+    const solicitudes = await obtenerSolicitudesUsuario(req.email);
+    res.json(solicitudes);
+  } catch (error) {
+    res.status(error.code || 500).json({ message: error.message });
+  }
+});
+
+app.get("/solicitudes/recibidas", verificarToken, async (req, res) => {
+  try {
+    const solicitudes = await obtenerSolicitudesRecibidas(req.email);
+    res.json(solicitudes);
+  } catch (error) {
+    res.status(error.code || 500).json({ message: error.message });
+  }
+});
+
+// Cancelar solicitud
+app.delete("/solicitudes/:id", verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await eliminarSolicitud(id, req.email);
+    res.json({ message: "Solicitud eliminada" });
+  } catch (error) {
+    res.status(error.code || 500).json({ message: error.message });
+  }
+});
+
+// Cambiar estado (Aceptar / Rechazar)
+app.put("/solicitudes/estado/:id", verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado } = req.body;
+    await actualizarEstado(id, estado);
+    res.json({ message: "Estado actualizado" });
+  } catch (error) {
+    res.status(error.code || 500).json({ message: error.message });
+  }
+});
+
 
 
 app.listen(3000, () => {
