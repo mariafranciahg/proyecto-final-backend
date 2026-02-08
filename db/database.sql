@@ -8,7 +8,6 @@ CREATE TABLE usuarios (
   foto TEXT,
   email VARCHAR(100) UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  rol VARCHAR(20) NOT NULL,
   fecha_creacion TIMESTAMP DEFAULT NOW()
 );
 
@@ -28,7 +27,10 @@ CREATE TABLE servicios (
   fecha_creacion TIMESTAMP DEFAULT NOW()
 );
 
-INSERT INTO categorias (nombre) VALUES
-('Electricidad'),
-('Limpieza'),
-('Gasfitería');
+INSERT INTO categorias (id, nombre) VALUES
+(1, 'Electricidad'),
+(2, 'Limpieza'),
+(3, 'Gasfitería'),
+(4, 'Herrería'),
+(5, 'Carpintería'),
+(6, 'Pintura');

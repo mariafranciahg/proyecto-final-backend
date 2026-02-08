@@ -7,16 +7,16 @@ const pool = new Pool({
 });
 
 
-const registrarUsuario = async ({ nombre, foto, email, password, rol }) => {
+const registrarUsuario = async ({ nombre, foto, email, password }) => {
     const passwordEncriptada = bcrypt.hashSync(password);
   
     const consulta = `
-    INSERT INTO usuarios (nombre, foto, email, password, rol)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING nombre, email, rol, fecha_creacion
+    INSERT INTO usuarios (nombre, foto, email, password)
+    VALUES ($1, $2, $3, $4)
+    RETURNING nombre, email, fecha_creacion
   `;
   
-    const values = [nombre, foto, email, passwordEncriptada, rol];
+    const values = [nombre, foto, email, passwordEncriptada];
     const { rows } = await pool.query(consulta, values);
     return rows[0];
   };
@@ -49,7 +49,7 @@ const registrarUsuario = async ({ nombre, foto, email, password, rol }) => {
   
   const obtenerUsuario = async (email) => {
     const consulta = `
-      SELECT id, nombre, foto, email, rol
+      SELECT id, nombre, foto, email
       FROM usuarios
       WHERE email = $1
     `;
