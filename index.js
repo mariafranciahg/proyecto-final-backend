@@ -24,7 +24,7 @@ app.use(express.json());
 
 
 app.get("/", (req, res) => {
-  res.send("Servidor funcionando 🚀");
+  res.send(`Servidor funcionando 🚀 en puerto ${process.env.PORT || 3000}`);
 });
 
 
