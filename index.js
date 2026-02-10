@@ -20,6 +20,14 @@ const verificarToken = require("./middlewares/auth.js");
 
 const app = express();
 
+app.use(
+  cors({
+    origin: ["https://servicasa.vercel.app"],
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 
@@ -159,13 +167,7 @@ app.put("/solicitudes/estado/:id", verificarToken, async (req, res) => {
 
 
 
-app.use(
-  cors({
-    origin: ["https://servicasa.vercel.app"],
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
+
 
 
 app.listen(process.env.PORT || 3000, () => {
