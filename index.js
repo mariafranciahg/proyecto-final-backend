@@ -159,6 +159,13 @@ app.put("/solicitudes/estado/:id", verificarToken, async (req, res) => {
 });
 
 
+const cors = require("cors");
+
+app.use(cors({
+  origin: "https://servicasa.vercel.app/",
+  credentials: true
+}));
+
 
 app.listen(3000, () => {
   console.log("Servidor activo");
