@@ -20,7 +20,6 @@ const verificarToken = require("./middlewares/auth.js");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 
@@ -168,8 +167,8 @@ app.use(cors({
 }));
 
 
-app.listen(3000, () => {
-  console.log("Servidor activo");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Servidor activo en puerto ${process.env.PORT || 3000}`);
 });
 
 module.exports = app;
