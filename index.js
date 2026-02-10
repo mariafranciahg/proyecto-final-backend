@@ -158,7 +158,6 @@ app.put("/solicitudes/estado/:id", verificarToken, async (req, res) => {
 });
 
 
-const cors = require("cors");
 
 app.use(cors({
   origin: "https://proyecto-final-front-5pmp-27pqtkubz-mariafrancias-projects.vercel.app",
