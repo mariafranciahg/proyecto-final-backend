@@ -159,11 +159,13 @@ app.put("/solicitudes/estado/:id", verificarToken, async (req, res) => {
 
 
 
-app.use(cors({
-  origin: "https://proyecto-final-front-5pmp-27pqtkubz-mariafrancias-projects.vercel.app",
-  methods: "GET,POST,PUT,DELETE",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: ["https://servicasa.vercel.app"],
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 
 app.listen(process.env.PORT || 3000, () => {
